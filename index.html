@@ -3,57 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neo Hunter System</title>
+<title>Neo Hunter System Ultimate</title>
 
 <style>
+/* ===== BODY & GLOBAL ===== */
 body{
   margin:0;
-  font-family:system-ui,Segoe UI,Arial;
+  font-family: 'Segoe UI', system-ui, sans-serif;
   background:#02030a;
   color:white;
+  overflow-x:hidden;
+  position:relative;
 }
 
+/* ==== PARTICLES BACKGROUND ==== */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, rgba(0,255,255,0.15), transparent),
+    radial-gradient(2px 2px at 70% 80%, rgba(255,0,255,0.15), transparent);
+  animation: floatBg 30s linear infinite;
+  pointer-events:none;
+}
+@keyframes floatBg{
+  from{transform: translateY(0);}
+  to{transform: translateY(-300px);}
+}
+
+/* ===== HERO HEADER ===== */
 .hero{
   text-align:center;
-  padding:70px 20px 40px;
+  padding:80px 20px 40px;
 }
-
 .hero h1{
-  font-size:3.4rem;
+  font-size:3.6rem;
+  letter-spacing:2px;
   background:linear-gradient(90deg,#00f0ff,#7c3aed,#ff0080);
   -webkit-background-clip:text;
   color:transparent;
   text-shadow:0 0 30px rgba(0,240,255,.6);
+  animation: glowPulse 3s infinite alternate;
 }
+@keyframes glowPulse{
+  from{ text-shadow:0 0 10px rgba(0,240,255,.4); }
+  to{ text-shadow:0 0 35px rgba(255,0,255,.9); }
+}
+.hero p{ opacity:.8; font-size:1.2rem; }
 
+/* ===== TOP CARDS ===== */
+.top-section{
+  padding:20px;
+  text-align:center;
+}
 .top-grid{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
   gap:18px;
-  padding:20px;
+  margin-top:25px;
 }
-
 .card{
   width:200px;
-  padding:16px;
-  border-radius:16px;
+  padding:18px;
+  border-radius:18px;
   background:linear-gradient(145deg,#060913,#03050a);
   border:1px solid rgba(0,240,255,.35);
+  position:relative;
+  overflow:hidden;
   transition:.25s;
 }
-
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,transparent,rgba(0,240,255,.5),transparent);
+  opacity:0;
+  transition:.3s;
+}
+.card:hover::before{opacity:1;}
 .card:hover{
   transform:translateY(-6px) scale(1.05);
-  box-shadow:0 0 25px rgba(0,240,255,.6);
+  box-shadow:0 0 30px rgba(0,240,255,.6);
 }
+.rank-big{ font-size:1.4rem; color:#22d3ee; }
 
+/* ===== TABLE ===== */
 .board{
   max-width:1200px;
   margin:auto;
   padding:40px 20px 80px;
 }
-
 .search{
   width:100%;
   padding:12px;
@@ -63,30 +104,23 @@ body{
   color:white;
   margin-bottom:20px;
 }
-
 table{
   width:100%;
   border-collapse:collapse;
   background:rgba(10,20,40,.5);
+  backdrop-filter:blur(6px);
 }
-
 th,td{
   padding:10px;
   border-bottom:1px solid rgba(255,255,255,.08);
   text-align:center;
 }
-
-.badge{
-  padding:4px 10px;
-  border-radius:999px;
-  font-weight:bold;
-  font-size:.75rem;
-}
-
-.s{background:#ff2b2b;box-shadow:0 0 10px #ff2b2b}
-.a{background:#7c3aed}
-.b{background:#3b82f6}
-.c{background:#555}
+th{background:rgba(124,58,237,.2);}
+.badge{padding:4px 10px;border-radius:999px;font-weight:bold;font-size:.75rem;}
+.s{background:#ff2b2b;box-shadow:0 0 10px #ff2b2b;}
+.a{background:#7c3aed;}
+.b{background:#3b82f6;}
+.c{background:#555;}
 
 /* ===== ERROR GLITCH ===== */
 .glitch{
@@ -95,28 +129,39 @@ th,td{
   font-weight:bold;
   animation:glitch 1.2s infinite;
 }
-
 @keyframes glitch{
   0%{text-shadow:2px 0 red,-2px 0 blue}
   50%{text-shadow:-2px 0 red,2px 0 blue}
   100%{text-shadow:2px 0 red,-2px 0 blue}
 }
+.me-row{ background:rgba(0,240,255,.12); }
 
-.me-row{
-  background:rgba(0,240,255,.12);
+/* ===== STATS HOVER BAR ===== */
+.stat-bar{
+  height:8px;
+  border-radius:6px;
+  background:#111;
+  margin:6px 0;
 }
+.stat-fill{
+  height:100%;
+  border-radius:6px;
+  transition:.3s;
+}
+.force{background:#ff2b2b;}
+.speed{background:#3b82f6;}
+.iq{background:#7c3aed;}
 </style>
 </head>
-
 <body>
 
 <header class="hero">
   <h1>⚔️ NEO HUNTER SYSTEM</h1>
-  <p>2000 combattants scannés par l'IA</p>
+  <p>2000 combattants scannés par l'IA - futuriste & élite</p>
 </header>
 
-<section>
-  <h2 style="text-align:center">🔥 TOP 10 ÉLITE</h2>
+<section class="top-section">
+  <h2>🔥 ÉLITE MONDIALE</h2>
   <div class="top-grid" id="topGrid"></div>
 </section>
 
@@ -131,7 +176,7 @@ th,td{
         <th>Force</th>
         <th>Vitesse</th>
         <th>IQ</th>
-        <th>Ranked</th>
+        <th>Tier</th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -139,20 +184,16 @@ th,td{
 </section>
 
 <script>
-// ====== NAME PARTS TO CREATE 2000 UNIQUE ======
+// ===== NAMES =====
 const p1=["Neo","Dark","Ultra","Shadow","Iron","Cyber","Omega","Alpha","Zero","Nova","Hyper","Quantum","Ghost","Night","Solar"];
 const p2=["Blade","Hunter","Rider","Phantom","Titan","Breaker","Striker","Walker","Sniper","Drifter","Runner","Samurai","Knight","Vortex","Specter"];
-
-function uniqueName(id){
-  return p1[id%p1.length] + p2[(id*7)%p2.length] + "_" + id;
-}
+function uniqueName(id){ return p1[id%p1.length]+p2[(id*7)%p2.length]+"_"+id; }
 
 // ===== PLAYERS =====
 const players=[];
-
-// our squad slightly randomized stats
 function rand(min,max){return Math.floor(Math.random()*(max-min))+min}
 
+// 4 main characters
 players.push(
   {rank:10,name:"Kenni",force:rand(96,100),speed:rand(95,100),iq:rand(96,100)},
   {rank:15,name:"Sonya",force:rand(90,95),speed:rand(90,95),iq:rand(90,95)},
@@ -160,21 +201,14 @@ players.push(
   {rank:30,name:"Clara",force:rand(85,91),speed:rand(85,91),iq:rand(88,94)}
 );
 
-// generate rest to 2000
+// generate 2000 players
 for(let i=1;i<=2000;i++){
   if([10,15,20,30].includes(i)) continue;
-  players.push({
-    rank:i,
-    name:uniqueName(i),
-    force:rand(40,92),
-    speed:rand(40,92),
-    iq:rand(40,92)
-  });
+  players.push({rank:i,name:uniqueName(i),force:rand(40,92),speed:rand(40,92),iq:rand(40,92)});
 }
-
 players.sort((a,b)=>a.rank-b.rank);
 
-// ===== tier =====
+// tier system
 function tier(p){
   const avg=(p.force+p.speed+p.iq)/3;
   if(avg>=95) return 'S';
@@ -183,34 +217,31 @@ function tier(p){
   return 'C';
 }
 
-// ===== top cards =====
+// ===== TOP CARDS =====
 const topGrid=document.getElementById('topGrid');
 players.slice(0,10).forEach(p=>{
   const d=document.createElement('div');
   d.className='card';
   d.innerHTML=`
-    <h3>#${p.rank} ${p.name==='Kenni' ? '<span class="glitch">ERROR 404</span>' : p.name}</h3>
-    <p>💪 ${p.force}</p>
-    <p>⚡ ${p.speed}</p>
-    <p>🧠 ${p.iq}</p>
+    <div class="rank-big">#${p.rank}</div>
+    <h3>${p.name==='Kenni'?'<span class="glitch">ERROR 404</span>':p.name}</h3>
+    <p>💪 ${p.force} ⚡ ${p.speed} 🧠 ${p.iq}</p>
+    <div class="stat-bar"><div class="stat-fill force" style="width:${p.force}%"></div></div>
+    <div class="stat-bar"><div class="stat-fill speed" style="width:${p.speed}%"></div></div>
+    <div class="stat-bar"><div class="stat-fill iq" style="width:${p.iq}%"></div></div>
   `;
   topGrid.appendChild(d);
 });
 
-// ===== table =====
+// ===== TABLE =====
 const tbody=document.getElementById('tbody');
-
 function render(list){
   tbody.innerHTML='';
   list.slice(0,400).forEach(p=>{
     const t=tier(p);
     const tr=document.createElement('tr');
     if(p.name==='Kenni') tr.classList.add('me-row');
-
-    const displayName = p.name==='Kenni'
-      ? '<span class="glitch">ERROR 404</span>'
-      : p.name;
-
+    const displayName=p.name==='Kenni'?'<span class="glitch">ERROR 404</span>':p.name;
     tr.innerHTML=`
       <td>${p.rank}</td>
       <td>${displayName}</td>
@@ -222,10 +253,9 @@ function render(list){
     tbody.appendChild(tr);
   });
 }
-
 render(players);
 
-// ===== search =====
+// ===== SEARCH =====
 document.getElementById('search').addEventListener('input',e=>{
   const v=e.target.value.toLowerCase();
   render(players.filter(p=>p.name.toLowerCase().includes(v)));
